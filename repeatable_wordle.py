@@ -27,23 +27,25 @@ for i in range(5):
 canv.pack()
 
 window.mainloop()
-"""   
-from array import array
+"""
 from random import randint
 import enum
 
 
-tries = [[0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0]]
+tries = [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+]
 
-#reads file of worldle words and selects a random word
-file = open('wordle-answers-alphabetical.txt', 'r')
+# reads file of worldle words and selects a random word
+file = open("wordle-answers-alphabetical.txt", "r")
 index = randint(0, 2316)
 l = file.readlines()
-word = l[index].strip('\n')
+word = l[index].strip("\n")
 
 
 class States(enum.Enum):
@@ -53,23 +55,14 @@ class States(enum.Enum):
     Absent = 3
 
 
-def colouring(guess: str, target: str) -> array:
+def colouring(guess: str, target: str) -> tuple[States]:
     # states of each letter (correct, present, and absent)
-    sl1 = States.Emp
-    sl2 = States.Emp
-    sl3 = States.Emp
-    sl4 = States.Emp
-    sl5 = States.Emp
-    states = [sl1, sl2, sl3, sl4, sl5]
+    states = [States.Emp] * 5
     for i in range(5):
-        if(guess[i] == target[i]):
+        if guess[i] == target[i]:
             states[i] = States.Correct
-        elif(guess[i] in target):
+        elif guess[i] in target:
             states[i] = States.Present
         else:
             states[i] = States.Absent
-    return states
-
-
-
-
+    return tuple(states)  # type: ignore
