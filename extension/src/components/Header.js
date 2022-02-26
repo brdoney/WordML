@@ -1,5 +1,4 @@
 import '../assets/css/Header.css';
-import '../assets/js/scraper.js';
 
 function header() {
   return (
