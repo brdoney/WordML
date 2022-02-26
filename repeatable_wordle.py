@@ -61,8 +61,23 @@ def colouring(guess: str, target: str) -> tuple[States]:
     for i in range(5):
         if guess[i] == target[i]:
             states[i] = States.Correct
-        elif guess[i] in target:
+        elif guess[i] in target and occuranceNumber(guess, i) <= totalOccurances(target, guess[i]):
             states[i] = States.Present
         else:
             states[i] = States.Absent
     return tuple(states)  # type: ignore
+
+def occuranceNumber(word: str, index: int) -> int:
+    letter = word[index]
+    occurances = 0
+    for i in range(index+1):
+        if(str[i] == letter):
+            occurances += 1
+    return occurances
+
+def totalOccurances(word: str, letter: str) -> int:
+    count = 0
+    for i in range(5):
+        if letter == word[i]:
+            count += 1
+    return count
