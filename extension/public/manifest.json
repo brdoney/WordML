@@ -3,7 +3,6 @@
   "name": "Wordle Machine Learning Helper",
   "version": "1.0.0",
   "manifest_version": 2,
-  "persistent": true,
   "permissions": [
     "storage",
     "tabs",
