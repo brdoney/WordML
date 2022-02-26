@@ -41,12 +41,6 @@ tries = [
     [0, 0, 0, 0, 0],
 ]
 
-# reads file of worldle words and selects a random word
-file = open("wordle-answers-alphabetical.txt", "r")
-index = randint(0, 2316)
-l = file.readlines()
-word = l[index].strip("\n")
-
 
 class States(enum.Enum):
     Emp = 0
