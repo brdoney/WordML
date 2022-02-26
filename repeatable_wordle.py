@@ -1,52 +1,5 @@
-""" 
-
-from tkinter import *
-from turtle import bgcolor
-
-window = Tk()
-window.title("Repeatable Wordle")
-
-canv = Canvas(window, height=700, width = 700, bg='white')
-boxDimensions = 75
-#boxes = [[a1, a2, a3, a4, a5], [b1, b2, b3, b4, b5], [c1, c2, c3, c4, c5], [d1, d2, d3, d4, d5], [e1, e2, e3, e4, e5]]
-
-boxes = [[0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0],
-         [0,0,0,0,0]]
-
-    
-for i in range(5):
-    for j in range(5):
-        x = 50+ 100*j + 25*(j-1)
-        y = 50+ 100*i + 25*(i-1)
-        boxes[i][j] = canv.create_rectangle(x, y, x+boxDimensions, y + boxDimensions, outline='black')
-
-
-canv.pack()
-
-window.mainloop()
-"""
 from random import randint
 import enum
-
-
-tries = [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-]
-
-# reads file of worldle words and selects a random word
-file = open("wordle-answers-alphabetical.txt", "r")
-index = randint(0, 2316)
-l = file.readlines()
-word = l[index].strip("\n")
-
 
 class States(enum.Enum):
     Emp = 0
@@ -71,7 +24,7 @@ def occuranceNumber(word: str, index: int) -> int:
     letter = word[index]
     occurances = 0
     for i in range(index+1):
-        if(str[i] == letter):
+        if(word[i] == letter):
             occurances += 1
     return occurances
 
@@ -81,3 +34,37 @@ def totalOccurances(word: str, letter: str) -> int:
         if letter == word[i]:
             count += 1
     return count
+
+def prGreen(skk): return "\033[92m {}\033[00m" .format(skk)
+def prYellow(skk): return "\033[93m {}\033[00m" .format(skk)
+def prBlack(skk): return "\033[98m {}\033[00m" .format(skk)
+
+def playGame(target: str) -> int:
+    target = target.lower()
+    score = 0
+    guesses = 0
+    currState = [States.Emp] * 5
+    coloredGuesses = ""
+    notSolved = True
+    while guesses < 6 and notSolved:
+        currGuess = str(input())
+        currState = colouring(currGuess, target)
+        correctLetters = 0
+        for i in range(5):
+            if currState[i] == States.Correct:
+                coloredGuesses += prGreen(currGuess[i])
+                correctLetters += 1
+                if(correctLetters == 5):
+                    notSolved = False
+            elif currState[i] == States.Present:
+                coloredGuesses += prYellow(currGuess[i])
+            else:
+                coloredGuesses += prBlack(currGuess[i])
+        guesses += 1
+        score += 1
+        coloredGuesses += "\n"
+        print(coloredGuesses)
+    if(notSolved):
+        return -1
+    else:
+        return score
