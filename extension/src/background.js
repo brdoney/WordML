@@ -1,5 +1,9 @@
 /*global chrome*/
 
+window.onload = function() {
+  console.log("onload" + Date())
+}
+
 document.addEventListener('keyup', (e) => {
     if (e.code === "l") {
         scrapeWord();
