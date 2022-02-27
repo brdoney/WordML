@@ -5,12 +5,12 @@ chrome.runtime.sendMessage({greeting: document.all[0].outerHTML}, function(respo
     console.log(response.farewell);
   });
 
-function parseSource() {
+async function parseSource() {
     var foo = document.createElement( 'html' );
     foo = document.getElementsByTagName('game-app').item(0).shadowRoot.getElementById('board');
 
     var tempCorrectWords = 0;
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < correctWords + 1; i++) {
       var row = foo.children[i];
       var countValid = 0;
       for (const letter of row.shadowRoot.children[1].children) {
@@ -25,34 +25,51 @@ function parseSource() {
     }
     if (tempCorrectWords > correctWords) {
         correctWords++;
-        getWordData();
+        console.log("fuck");
+        console.log(getWordData());
     }
-    // console.log("correct words: " + correctWords);
-    // console.log("correct word: " + foo.children[correctWords - 1].getAttribute('letters'));
 }
 
 function getWordData() {
   var row = document.createElement( 'html' );
   row = document.getElementsByTagName('game-app').item(0).shadowRoot.getElementById('board').children[correctWords - 1];
-  var word = row.shadowRoot.children[1].children;
-  var numAbsent = 0;
-  var numPresent = 0;
-  var numCorrect = 0;
-  for (const letter of word) {
-      if (letter.getAttribute('evaluation') === "absent") {
-        numAbsent++;
+  var position = 0;
+  let jsonAbsent = '"absent:" "';
+  let jsonPresent = '"present:" [';
+  let jsonCorrect = '"correct:" [';
+  let jsonReturn = '{';
+  for (const letter of row.shadowRoot.children[1].children) {
+      var tempEval = letter.getAttribute('evaluation');
+      if (tempEval === "absent") {
+        jsonAbsent += letter.getAttribute('letter').toLowerCase();
       }
-      else if(letter.getAttribute('evaluation') === "present") {
-        numPresent++;
+      else if(tempEval === "present") {
+        let tempJSON = '{';
+        tempJSON += '"letter": "' + letter.getAttribute('letter').toLowerCase() + '",';
+        tempJSON += '"position": ' + position + ',';
+        tempJSON += '}'
+        jsonPresent += tempJSON;
+        if (position !== 5) {
+          jsonPresent += ',';
+        }
       }
-      else if(letter.getAttribute('evaluation') === "correct") {
-        numCorrect++;
+      else if(tempEval === "correct") {
+        let tempJSON = '{';
+        tempJSON += '"letter": "' + letter.getAttribute('letter').toLowerCase() + '",';
+        tempJSON += '"position": ' + position + ',';
+        tempJSON += '}'
+        jsonCorrect += tempJSON;
+        if (position !== 5) {
+          jsonCorrect += ',';
+        }
       }
+      position ++;
   }
-  console.log("The newest word is " + row.getAttribute('letters'));
-  console.log("There are " + numAbsent + " absent letters");
-  console.log("There are " + numPresent + " present letters");
-  console.log("There are " + numCorrect + " correct letters");
+  jsonAbsent += '",';
+  jsonPresent += "],"
+  jsonCorrect += "]";
+  jsonReturn += jsonAbsent + jsonPresent + jsonCorrect + '}';
+  return jsonReturn;
 }
 
 document.onkeypress = function (e) {
