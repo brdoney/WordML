@@ -1,5 +1,5 @@
 from copy import copy
-from repeatable_wordle import colouring, States
+from colouring import colouring, States
 import numpy as np
 from tqdm import tqdm
 from dataclasses import dataclass
