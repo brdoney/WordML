@@ -34,10 +34,12 @@ def transaction():
 
     # Get top 5
     top_words = words[-5:]
-    if top_words.size > 0:
-        top_scores = scores[-5:] / scores[-1]
+    top_scores = scores[-5:]
+
+    if not (top_scores == 0).all():
+        top_scores /= scores[-1]
     else:
-        top_scores = scores[-5:] + 1
+        top_scores += 1
 
     entries = []
     for i in reversed(range(0, top_words.size)):
