@@ -73,3 +73,21 @@ When all the different components were integrated to make our final product, the
 ### Challenge 03 - Learning As We Went
 
 Most of these technologies we were using for the first time, so a lot of time was spent simply learning how they worked. In particular, the Chrome extension API and React were pain points, but very fun to learn about and use in the project.
+
+
+### Instructions to Use (Note: must have node.js installed)
+1. Install dependencies
+    terminal command: pip3 install flask flask_cors numpy tqdm
+    have npm installed
+2. How to load extensions
+    a. get into extension directory in terminal
+    b. terminal command: npm install
+    c. terminal command: npm run build
+3. load extension/build into chrome
+    a. into search bar -> chrome://extensions
+    b. click load unpacked
+    c. choose build folder from extension dir/folder
+4. flask run in terminal
+    terminal command: flask run
+5. load wordle website
+
