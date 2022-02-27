@@ -1,3 +1,4 @@
+from pickle import NONE
 from random import randint
 import enum
 
@@ -10,14 +11,16 @@ class States(enum.Enum):
 
 def colouring(guess: str, target: str) -> tuple[States]:
     # states of each letter (correct, present, and absent)
-    states = [States.Emp] * 5
+    states = [States.Absent] * 5
+    guessArr = list(guess)
+    targetArr = list(target)
     for i in range(5):
-        if guess[i] == target[i]:
+        if(guessArr[i] == targetArr[i]):
             states[i] = States.Correct
-        elif guess[i] in target and guess.count(guess[i], 0, i) <= target.count(guess[i]):
+            targetArr[i] = 0
+    for i in range(5):
+        if guessArr[i] in targetArr and guess.count(guessArr[i],0,i) < targetArr.count(guess[i]):
             states[i] = States.Present
-        else:
-            states[i] = States.Absent
     return tuple(states)  # type: ignore
 
 def prGreen(skk): return "\033[92m {}\033[00m" .format(skk)
@@ -54,4 +57,9 @@ def playGame(target: str) -> int:
     else:
         return score
 
-print(playGame("crane"))
+# index = randint(0, 2315)
+# file = open('wordle-answers-alphabetical.txt', 'r')
+# l = file.readlines()
+# word = l[index].strip('\n')
+
+# print(playGame(word))
