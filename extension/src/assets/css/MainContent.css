@@ -22,13 +22,8 @@
   }
 
   .content{
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
+    margin: auto;
+    display: block;
     justify-content: center;
     padding-bottom: 15px;
-  }
-
-  #description {
-    text-align: center;
   }
