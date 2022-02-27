@@ -62,7 +62,7 @@ function Content() {
           <tr>
             <th>Word</th>
             <th>Rating</th>
-            <th>Score</th>
+            <th>Strength</th>
           </tr>
         </thead>
         {rows}

@@ -1,9 +1,8 @@
 /*global chrome*/
 var correctWords = 0;
 
-async function parseSource() {
-  var foo = document.createElement("html");
-  foo = document
+function parseSource() {
+  let foo = document
     .getElementsByTagName("game-app")
     .item(0)
     .shadowRoot.getElementById("board");
@@ -25,11 +24,10 @@ async function parseSource() {
   if (tempCorrectWords > correctWords) {
     correctWords++;
     const data = getWordData();
-    if (data !== null) {
-      console.log(data);
-      chrome.runtime.sendMessage({ type: "save", message: data });
-    }
-  }
+    chrome.runtime.sendMessage({ type: "save", message: data });
+  } else if (tempCorrectWords === 0) {
+    chrome.runtime.sendMessage({ type: "save", message: null });
+	}
 }
 
 function getWordData() {
@@ -61,14 +59,6 @@ function getWordData() {
     entries.entries.push(entry);
   }
 
-  // Check if we won the game
-  const last = entries.entries[correctWords - 1];
-  if (last.correct.length === 5) {
-    // We won, so reset
-    chrome.runtime.sendMessage({ type: "save", message: null });
-    return null;
-  }
-
   return entries;
 }
 
@@ -77,3 +67,7 @@ document.onkeypress = function (e) {
     parseSource();
   }
 };
+
+window.addEventListener("load", () => {
+	parseSource();
+}) 
