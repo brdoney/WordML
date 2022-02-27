@@ -1,12 +1,12 @@
 import '../assets/css/Header.css';
+import logo from '../assets/img/logo.png';
 
 function header() {
   return (
     <div class="header">
-        <h1>Wordle ML</h1>
-        <p1>A wordle solution assistant!</p1>
-        <br />
-        <p1><b>First Word: </b></p1 ><p1 id="word01"></p1>
+      <img src={logo} alt="WordML Logo" />
+      <br />
+      <p1>A machine learning wordle assistant</p1>
     </div>
   );
 }

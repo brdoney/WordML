@@ -1,24 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
   h1 {
   	text-align: center;
-    color: white;
-    font-family: "Arimo", serif;
-    font-weight: bolder;
   }
-  body {
-    font-family: "Arimo", serif;
-    font-weight: bold;
-    text-transform: uppercase;
-    background-color: black;
-  }
+
   td, th {
   	border: 2px solid grey;
     padding: 1rem;
-    color: white;
   }
+
   thead{
   	background-color: #383838;
   }
+
   table {
   	border-collapse: separate;
     border-spacing: 5px;
@@ -34,7 +27,7 @@
     margin-right: auto;
     display: flex;
   }
+  
   #description {
-  	color: white;
     text-align: center;
   }
