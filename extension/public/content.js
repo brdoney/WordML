@@ -25,34 +25,51 @@ async function parseSource() {
   if (tempCorrectWords > correctWords) {
     correctWords++;
     const data = getWordData();
-    console.log(data);
-    chrome.runtime.sendMessage({ message: data });
+    if (data !== null) {
+      console.log(data);
+      chrome.runtime.sendMessage({ type: "save", message: data });
+    }
   }
 }
 
 function getWordData() {
-  let row = document.createElement("html");
-  row = document
+  let board = document
     .getElementsByTagName("game-app")
     .item(0)
-    .shadowRoot.getElementById("board").children[correctWords - 1];
-  var position = 0;
-	const entry = { present: [], correct: {}, absent: "" };
-  for (const letter of row.shadowRoot.children[1].children) {
-    const tempEval = letter.getAttribute("evaluation");
-    if (tempEval === "absent") {
-      entry.absent += letter.getAttribute("letter").toLowerCase();
-    } else if (tempEval === "present") {
-      entry.present.push({
-        letter: letter.getAttribute("letter").toLowerCase(),
-        position: position,
-      });
-    } else if (tempEval === "correct") {
-      entry.correct[position] = letter.getAttribute("letter").toLowerCase();
+    .shadowRoot.getElementById("board");
+
+  const entries = { entries: [] };
+  for (let i = 0; i < correctWords; i++) {
+    const row = board.children[i];
+    var position = 0;
+    const entry = { present: [], correct: {}, absent: "" };
+    for (const letter of row.shadowRoot.children[1].children) {
+      const tempEval = letter.getAttribute("evaluation");
+      if (tempEval === "absent") {
+        entry.absent += letter.getAttribute("letter").toLowerCase();
+      } else if (tempEval === "present") {
+        entry.present.push({
+          letter: letter.getAttribute("letter").toLowerCase(),
+          position: position,
+        });
+      } else if (tempEval === "correct") {
+        entry.correct[position] = letter.getAttribute("letter").toLowerCase();
+      }
+      position++;
     }
-    position++;
+    // Add entry
+    entries.entries.push(entry);
   }
-  return entry;
+
+  // Check if we won the game
+  const last = entries.entries[correctWords - 1];
+  if (last.correct.length === 5) {
+    // We won, so reset
+    chrome.runtime.sendMessage({ type: "save", message: null });
+    return null;
+  }
+
+  return entries;
 }
 
 document.onkeypress = function (e) {
