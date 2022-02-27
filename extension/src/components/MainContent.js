@@ -52,7 +52,6 @@ function content() {
             <td id="score5">Score5</td>
           </tr>
         </table>
-      <p id="description"> Description? </p>
     </div>
   );
 }
