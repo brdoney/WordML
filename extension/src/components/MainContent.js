@@ -2,8 +2,10 @@
 import "../assets/css/MainContent.css";
 import { useEffect, useState } from "react";
 
+const API_URL = "http://127.0.0.1:4999";
+
 function Row(props) {
-	const scorePercent = `${(props.score * 100).toFixed(2)}`;
+  const scorePercent = `${(props.score * 100).toFixed(2)}`;
 
   return (
     <tr>
@@ -17,36 +19,45 @@ function Row(props) {
 }
 
 function Content() {
-  const [data, setData] = useState({
-    entries: [
-      {
-        score: 1.0,
-        word: "tares",
-      },
-      {
-        score: 0.9940471601858769,
-        word: "lares",
-      },
-      {
-        score: 0.9867535607370882,
-        word: "rales",
-      },
-      {
-        score: 0.98376684188455,
-        word: "rates",
-      },
-      {
-        score: 0.9804624629607341,
-        word: "nares",
-      },
-    ],
-  });
+  const [data, setData] = useState({ entries: [] });
 
   const processChange = (message) => {
     console.log(message.message);
+
+    // Post update then get data to update guesses
+    fetch(`${API_URL}/board/${id}`, {
+      method: "POST",
+      body: JSON.stringify(message.message),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        setData(res);
+      });
   };
 
+  const [id, setId] = useState(NaN);
   useEffect(() => {
+    async function func() {
+      // Get id for later
+      const id = await fetch(`${API_URL}/get_id`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((res) => {
+          return res["id"];
+        });
+      setId(id);
+
+      // Get the initial words
+      const entries = await fetch(`${API_URL}/board/${id}`).then((res) => {
+        return res.json();
+      });
+      setData(entries);
+    }
+    func();
+
     chrome.runtime.onMessage.addListener(processChange);
     return () => chrome.runtime.onMessage.removeListener(processChange);
   }, []);
