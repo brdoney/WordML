@@ -2,6 +2,6 @@
 
 console.log("Hello World - Background");
 
-chrome.runtime.onMessage.addListener(function(message, callback) {
-    console.log(message.greeting);
-  });
+chrome.runtime.onMessage.addListener(function (message, callback) {
+  console.log(message.greeting);
+});

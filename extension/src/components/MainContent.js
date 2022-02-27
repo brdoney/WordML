@@ -43,8 +43,7 @@ function Content() {
   });
 
   const processChange = (message) => {
-    console.log(message.greeting);
-    setData(message.data);
+    console.log(message.message);
   };
 
   useEffect(() => {
