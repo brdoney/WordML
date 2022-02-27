@@ -22,7 +22,7 @@ def get_id():
 
 def __parse_row(row: dict) -> tuple[int, Row]:
     present = {(p["position"], p["letter"]) for p in row["present"]}
-    correct = {c["position"]: c["letter"] for c in row["correct"]}
+    correct = {int(pos): letter for pos, letter in row["correct"].items()}
     absent = row["absent"]
     r = Row(present, correct, absent)
     return row["id"], r
@@ -43,10 +43,13 @@ def __get_guesses(board_id: int, row: Optional[Row]) -> dict:
     # Get top 5
     top_words = words[-5:]
     top_score = scores[-1]
-    top_scores = scores[-5:] / top_score
+    if top_score > 0:
+        top_scores = scores[-5:] / top_score
+    else:
+        top_scores = scores[-5:] + 1
 
     entries = []
-    for i in reversed(range(-5, len(top_words))):
+    for i in reversed(range(0, top_words.size)):
         entries.append({"word": top_words[i], "score": top_scores[i]})
 
     return {"entries": entries}
@@ -59,5 +62,6 @@ def transaction(board_id: int):
         return __get_guesses(board_id, None)
     else:
         data: dict = request.json  # type: ignore
+        print(data)
         curr_id, row = __parse_row(data)
         return __get_guesses(curr_id, row)
