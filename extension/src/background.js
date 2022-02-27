@@ -1,22 +1,21 @@
 /*global chrome*/
 
 // When wordle is opened, run this
-window.onload = function() {
-    scrapeRows();
+window.onload = async function() {
+    getSourceCode();
 }
 
-function scrapeRows() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        // since only one tab should be active and in the current window at once
-        // the return variable should only have one entry
-        var xhr = new XMLHttpRequest();
+async function getSourceCode() {
+    return await chrome.tabs.query({active: true, currentWindow: true}, async function(tabs) {
         var tabURL = tabs[0].url;
-        xhr.open("GET", tabURL, true);
-        xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            alert(xhr.responseText);
-            }
-        }
-        xhr.send();
+        fetch(tabURL).then(function (response) {
+            return response.text();
+        }).then(function (html) {
+            alert(html);
+        }).catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+        });
+        
      });
 }

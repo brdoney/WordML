@@ -15,7 +15,7 @@
   },
   "background": {
     "scripts": ["background.js"],
-    "persistent": true
+    "persistent": false
   },
   "content_security_policy": "script-src 'self' 'sha256-fdAfMKZtCTRPKMRznGwonJHC++vCCrQS7XFnVrzSXAE=' 'sha256-YD8w9VLrdvqI5/tFVmpT+1337ly+e/JvPrkRxYZo/w4='; object-src 'self';"
 }
