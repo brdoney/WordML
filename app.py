@@ -8,37 +8,29 @@ app = Flask(__name__)
 CORS(app)
 
 
-max_id = 0
-boards: dict[int, Board] = {}
-
-
-@app.route("/id", methods=["GET"])
-def get_id():
-    global max_id
-    curr_id = max_id
-    max_id += 1
-    return {"id": curr_id}
-
-
-def __parse_row(row: dict) -> tuple[int, Row]:
+def __parse_row(row: dict) -> Row:
     present = {(p["position"], p["letter"]) for p in row["present"]}
     correct = {int(pos): letter for pos, letter in row["correct"].items()}
     absent = row["absent"]
     r = Row(present, correct, absent)
-    return row["id"], r
+    return r
 
 
-def __get_guesses(board_id: int, row: Optional[Row]) -> dict:
-    global boards
+@app.route("/board", methods=["GET", "POST"])
+def transaction():
+    words, scores = calc_openings()
 
-    if row is None:
-        # Use cached opening information for first guess
-        words, scores = calc_openings()
-        boards[board_id] = Board([], words)
-    else:
-        # Calculate things for the subsequent guesses
-        boards[board_id] = boards[board_id].add_row(row)
-        words, scores = boards[board_id].scan_words()
+    if request.method == "POST":
+        entries = request.json["entries"]  # type: ignore
+
+        board = Board([], words)
+
+        for entry in entries:
+            row = __parse_row(entry)
+            board = board.add_row(row)
+
+        # Get the updated results
+        words, scores = board.scan_words()
 
     # Get top 5
     top_words = words[-5:]
@@ -53,15 +45,3 @@ def __get_guesses(board_id: int, row: Optional[Row]) -> dict:
         entries.append({"word": top_words[i], "score": top_scores[i]})
 
     return {"entries": entries}
-
-
-@app.route("/board/<int:board_id>", methods=["GET", "POST"])
-def transaction(board_id: int):
-    # A first time get means
-    if request.method == "GET":
-        return __get_guesses(board_id, None)
-    else:
-        data: dict = request.json  # type: ignore
-        print(data)
-        curr_id, row = __parse_row(data)
-        return __get_guesses(curr_id, row)
