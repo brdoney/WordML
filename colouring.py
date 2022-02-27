@@ -1,5 +1,6 @@
 import enum
 
+
 class States(enum.Enum):
     Emp = 0
     Correct = 1
@@ -17,10 +18,10 @@ def colouring(guess: str, target: str) -> tuple[States]:
             states[i] = States.Correct
             targetArr[i] = 0  # type: ignore
     for i in range(5):
-        if guessArr[i] in targetArr and guess.count(
-            guessArr[i], 0, i
-        ) < targetArr.count(guess[i]):
+        if (
+            states[i] != States.Correct
+            and guessArr[i] in targetArr
+            and guess.count(guessArr[i], 0, i) <= targetArr.count(guess[i])
+        ):
             states[i] = States.Present
     return tuple(states)  # type: ignore
-
-

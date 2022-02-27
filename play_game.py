@@ -1,8 +1,11 @@
-from random import randint
+import sys
+
+from tqdm import tqdm
 from board import Board, Row
 from colouring import States, colouring
 
 from guessing import calc_openings
+
 
 def prGreen(skk):
     return "\033[92m {}\033[00m".format(skk)
@@ -14,6 +17,7 @@ def prYellow(skk):
 
 def prBlack(skk):
     return "\033[98m {}\033[00m".format(skk)
+
 
 def playGame(target: str) -> int:
     target = target.lower()
@@ -40,21 +44,23 @@ def playGame(target: str) -> int:
         guesses += 1
         score += 1
         coloredGuesses += "\n"
-        print(coloredGuesses)
-        board = board.add_row(Row.from_states(currState, currGuess))
+        # print(coloredGuesses)
+        row = Row.from_states(currState, currGuess)
+        board = board.add_row(row)
         words, scores = board.scan_words()
     if notSolved:
-        return -1
+        return 0
     else:
         return score
 
 
 if __name__ == "__main__":
-    file = open("./data/new-wordle-answers-alphabetical.txt", "r")
+    file = open("./data/wordle-answers-alphabetical.txt", "r")
     lines = file.readlines()
 
     totalScores = 0
-    for i in range(len(lines)):
+    for i in tqdm(range(len(lines))):
         word = lines[i].strip("\n")
-        totalScores += playGame(word)
-    print("average score is: " + (totalScores/len(lines)))
+        res = playGame(word)
+        totalScores += res
+    print("average score is: " + (totalScores / len(lines)))
