@@ -34,9 +34,9 @@ function getWordData() {
   var row = document.createElement( 'html' );
   row = document.getElementsByTagName('game-app').item(0).shadowRoot.getElementById('board').children[correctWords - 1];
   var position = 0;
-  let jsonAbsent = '"absent:" "';
-  let jsonPresent = '"present:" [';
-  let jsonCorrect = '"correct:" [';
+  let jsonAbsent = '"absent": "';
+  let jsonPresent = '"present": [';
+  let jsonCorrect = '"correct": [';
   let jsonReturn = '{';
   for (const letter of row.shadowRoot.children[1].children) {
       var tempEval = letter.getAttribute('evaluation');
