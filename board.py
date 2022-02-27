@@ -47,6 +47,22 @@ class Row:
 
         return True
 
+    @staticmethod
+    def from_states(states: list[States], word: str) -> "Row":
+        present = set()
+        correct = {}
+        absent = set()
+
+        for i, state in enumerate(states):
+            if state == States.Absent:
+                absent.add(word[i])
+            elif state == States.Present:
+                present.add((i, word[i]))
+            elif state == States.Correct:
+                correct[i] = word[i]
+
+        return Row(present, correct, absent)
+
 
 @dataclass
 class Board:
