@@ -1,4 +1,6 @@
 import enum
+from random import randint
+
 
 class States(enum.Enum):
     Emp = 0
@@ -13,23 +15,33 @@ def colouring(guess: str, target: str) -> tuple[States]:
     guessArr = list(guess)
     targetArr = list(target)
     for i in range(5):
-        if(guessArr[i] == targetArr[i]):
+        if guessArr[i] == targetArr[i]:
             states[i] = States.Correct
-            targetArr[i] = 0
+            targetArr[i] = 0  # type: ignore
     for i in range(5):
-        if guessArr[i] in targetArr and guess.count(guessArr[i],0,i) < targetArr.count(guess[i]):
+        if guessArr[i] in targetArr and guess.count(
+            guessArr[i], 0, i
+        ) < targetArr.count(guess[i]):
             states[i] = States.Present
     return tuple(states)  # type: ignore
 
-def prGreen(skk): return "\033[92m {}\033[00m" .format(skk)
-def prYellow(skk): return "\033[93m {}\033[00m" .format(skk)
-def prBlack(skk): return "\033[98m {}\033[00m" .format(skk)
+
+def prGreen(skk):
+    return "\033[92m {}\033[00m".format(skk)
+
+
+def prYellow(skk):
+    return "\033[93m {}\033[00m".format(skk)
+
+
+def prBlack(skk):
+    return "\033[98m {}\033[00m".format(skk)
+
 
 def playGame(target: str) -> int:
     target = target.lower()
     score = 0
     guesses = 0
-    currState = [States.Emp] * 5
     coloredGuesses = ""
     notSolved = True
     while guesses < 6 and notSolved:
@@ -40,7 +52,7 @@ def playGame(target: str) -> int:
             if currState[i] == States.Correct:
                 coloredGuesses += prGreen(currGuess[i])
                 correctLetters += 1
-                if(correctLetters == 5):
+                if correctLetters == 5:
                     notSolved = False
             elif currState[i] == States.Present:
                 coloredGuesses += prYellow(currGuess[i])
@@ -50,14 +62,16 @@ def playGame(target: str) -> int:
         score += 1
         coloredGuesses += "\n"
         print(coloredGuesses)
-    if(notSolved):
+    if notSolved:
         return -1
     else:
         return score
 
-# index = randint(0, 2315)
-# file = open('wordle-answers-alphabetical.txt', 'r')
-# l = file.readlines()
-# word = l[index].strip('\n')
 
-# print(playGame(word))
+if __name__ == "__main__":
+    index = randint(0, 2315)
+    file = open("./data/wordle-answers-alphabetical.txt", "r")
+    lines = file.readlines()
+    word = lines[index].strip("\n")
+
+    print(playGame(word))

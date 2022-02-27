@@ -1,6 +1,5 @@
-from tkinter import W
+from copy import copy
 from repeatable_wordle import colouring, States
-from read_dataset import read_data
 import numpy as np
 from tqdm import tqdm
 from dataclasses import dataclass
@@ -9,26 +8,13 @@ Config = tuple[States]
 
 
 @dataclass
-class Update:
-    present: set[tuple[int, str]]
-    correct: dict[int, str]
-    absent: set[str]
-
-
-@dataclass
-class Board:
+class Row:
     # Every letter that is definitely present, but we don't know where (yellow)
     present: set[tuple[int, str]]
     # Letters we know the actual position of (green)
     correct: dict[int, str]
     # Verified to not be present in the string (gray)
     absent: set[str]
-
-    # List of possible words
-    words: np.ndarray
-
-    # Maxmium number of combos (3 possibilities ^ 5 squares)
-    NUM_COMBOS = 3 ** 5
 
     def is_possible(self, word: str) -> bool:
         remaining = list(word)
@@ -42,9 +28,12 @@ class Board:
         for i in range(4, -1, -1):
             if i in self.correct:
                 if remaining[i] != self.correct[i]:
-                    remaining.pop(i)
+                    # Green position didn't match
+                    return False
+                # Remove it so we don't look at it again
+                remaining.pop(i)
 
-        # Check that all of the yellow letters are present
+        # Check that all of the yellow letters are present in what's left
         for _, letter in self.present:
             try:
                 remaining.remove(letter)
@@ -55,17 +44,34 @@ class Board:
         for letter in remaining:
             if letter in self.absent:
                 return False
+
+        return True
+
+
+@dataclass
+class Board:
+    rows: list[Row]
+
+    # List of possible words
+    words: np.ndarray
+
+    # Maxmium number of combos (3 possibilities ^ 5 squares)
+    NUM_COMBOS = 3 ** 5
+
+    def is_possible(self, word: str) -> bool:
+        for row in self.rows:
+            if not row.is_possible(word):
+                return False
         return True
 
     def __filter_words(self):
-        self.words = np.array([w for w in self.words if self.is_possible(w)])
+        self.words = np.array([w for w in self.words if self.is_possible(w)])  # type: ignore
 
-    def update(self, up: Update) -> "Board":
-        # Construct a board with the new state
-        present = self.present.union(up.present)
-        correct = self.correct | up.correct
-        absent = self.absent.union(up.absent)
-        b = Board(present, correct, absent, self.words)
+    def add_row(self, row: Row) -> "Board":
+        # Create new board using the update
+        new_rows = copy(self.rows)
+        new_rows.append(row)
+        b = Board(new_rows, self.words.copy())
 
         # Filter the words given the new state
         b.__filter_words()
@@ -97,14 +103,14 @@ class Board:
         p = np.fromiter(p_configs.values(), dtype=float)
         return -np.sum(p * np.log2(p))  # type: ignore
 
-    def scan_words(self):
+    def scan_words(self) -> tuple[np.ndarray, np.ndarray]:
         num_words = self.words.size
         ps = np.empty((num_words, self.NUM_COMBOS))
 
         for i, guess in enumerate(tqdm(self.words)):
             counts: dict[Config, int] = {}
 
-            for target in self.words:
+            for target in self.words:  # type: ignore
                 c = colouring(guess, target)
                 if c in counts:
                     counts[c] += 1
@@ -118,27 +124,9 @@ class Board:
             ps[i] = np.pad(vals, (0, num_missing), constant_values=1)
 
         # Calc entropy
-        H = -np.sum(ps * np.log2(ps), axis=1)  # type: ignore
+        H: np.ndarray = -np.sum(ps * np.log2(ps), axis=1)  # type: ignore
         sorted_indices = np.argsort(H)
 
         sorted_H = H[sorted_indices]
         sorted_words = self.words[sorted_indices]
         return sorted_words, sorted_H
-
-
-if __name__ == "__main__":
-    words = read_data()
-    # print(words)
-
-    board = Board(set(), {}, set(), np.array(words))
-    # print(board.scan_words())
-
-    update = Update({(0, "d")}, {}, {*"oubt"})
-    board = board.update(update)
-    update = Update({(3, "d")}, {1: "i"}, {*"mls"})
-    board = board.update(update)
-    update = Update(set(), {4: "d"}, {*"ahe"})
-    board = board.update(update)
-    update = Update(set(), {4: "d"}, {*"ga"})
-    board = board.update(update)
-    print(board.scan_words())
