@@ -2,9 +2,9 @@ import '../assets/css/Footer.css';
 
 function footer() {
   return (
-    <div class="footer">
-      <p1>VT Hacks 2022</p1>
-      <div class="table">
+    <div className="footer">
+      <p>VT Hacks 2022</p>
+      <div className="table">
         <ul>
           <li>B. Doney</li>
           <li>R. Aneja</li>

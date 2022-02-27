@@ -1,13 +1,6 @@
 /*global chrome*/
 var correctWords = 0;
 
-chrome.runtime.sendMessage(
-  { greeting: document.all[0].outerHTML },
-  function (response) {
-    console.log(response.farewell);
-  }
-);
-
 async function parseSource() {
   var foo = document.createElement("html");
   foo = document
