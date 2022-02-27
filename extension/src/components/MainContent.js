@@ -1,6 +1,6 @@
 /*global chrome*/
 import "../assets/css/MainContent.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const API_URL = "http://127.0.0.1:4999";
 
@@ -20,14 +20,28 @@ function Row(props) {
 
 function Content() {
   const [data, setData] = useState({ entries: [] });
+  const [id, _setId] = useState(NaN);
+  const idRef = useRef(id);
+  const setId = (newId) => {
+    idRef.current = newId;
+    _setId(newId);
+  };
 
-  const processChange = (message) => {
+  function processChange(message) {
     console.log(message.message);
+    console.log(idRef.current);
+
+		// Add id to request
+		const update = message.message;
+		update.id = idRef.current;
 
     // Post update then get data to update guesses
-    fetch(`${API_URL}/board/${id}`, {
+    fetch(`${API_URL}/board/${idRef.current}`, {
       method: "POST",
-      body: JSON.stringify(message.message),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(update),
     })
       .then((res) => {
         return res.json();
@@ -35,23 +49,26 @@ function Content() {
       .then((res) => {
         setData(res);
       });
-  };
+  }
 
-  const [id, setId] = useState(NaN);
+  useEffect(() => {
+    console.log("id has changed", id);
+  }, [id]);
+
   useEffect(() => {
     async function func() {
       // Get id for later
-      const id = await fetch(`${API_URL}/id`)
+      const _id = await fetch(`${API_URL}/id`)
         .then((res) => {
           return res.json();
         })
         .then((res) => {
           return res["id"];
         });
-      setId(id);
+      setId(_id);
 
       // Get the initial words
-      const entries = await fetch(`${API_URL}/board/${id}`).then((res) => {
+      const entries = await fetch(`${API_URL}/board/${_id}`).then((res) => {
         return res.json();
       });
       setData(entries);
@@ -60,7 +77,7 @@ function Content() {
 
     chrome.runtime.onMessage.addListener(processChange);
     return () => chrome.runtime.onMessage.removeListener(processChange);
-  });
+  }, []);
 
   const rows = [];
   for (const row of data["entries"]) {
