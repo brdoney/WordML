@@ -75,19 +75,19 @@ When all the different components were integrated to make our final product, the
 Most of these technologies we were using for the first time, so a lot of time was spent simply learning how they worked. In particular, the Chrome extension API and React were pain points, but very fun to learn about and use in the project.
 
 
-### Instructions to Use (Note: must have node.js installed)
-1. Install dependencies
-    terminal command: pip3 install flask flask_cors numpy tqdm
-    have npm installed
+### Instructions to Use
+
+1. Install backend dependencies: `pip3 install flask flask_cors numpy tqdm`
 2. How to load extensions
-    a. get into extension directory in terminal
-    b. terminal command: npm install
-    c. terminal command: npm run build
+    1. Install Node.js/NPM
+    2. `cd extension`
+    3. `npm install`
+    4. `npm run build`
 3. load extension/build into chrome
-    a. into search bar -> chrome://extensions
-    b. click load unpacked
-    c. choose build folder from extension dir/folder
-4. flask run in terminal
-    terminal command: flask run
-5. load wordle website
+    1. Navigate to `chrome://extensions` in Chrome
+    2. Toggle on developer mode if not already done
+    3. Click "Load Unpacked"
+    4. Choose the `extension/build` folder from this repository
+4. Start the web server with `flask run -p 4999`
+5. Load Wordle website and have fun!
 
