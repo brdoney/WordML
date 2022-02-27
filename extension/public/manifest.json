@@ -13,17 +13,9 @@
   "browser_action": {
     "default_popup": "index.html"
   },
-  "commands": {
-    "enterWord" : {
-        "suggested_key": {
-             "default": "enter" 
-        },
-        "description": "Checks the inputted letters when enter is hit"
-    }
-  },
   "background": {
     "scripts": ["background.js"],
-    "persistent": false
+    "persistent": true
   },
   "content_security_policy": "script-src 'self' 'sha256-fdAfMKZtCTRPKMRznGwonJHC++vCCrQS7XFnVrzSXAE=' 'sha256-YD8w9VLrdvqI5/tFVmpT+1337ly+e/JvPrkRxYZo/w4='; object-src 'self';"
 }
