@@ -14,26 +14,11 @@ def colouring(guess: str, target: str) -> tuple[States]:
     for i in range(5):
         if guess[i] == target[i]:
             states[i] = States.Correct
-        elif guess[i] in target and occuranceNumber(guess, i) <= totalOccurances(target, guess[i]):
+        elif guess[i] in target and guess.count(guess[i], 0, i) <= target.count(guess[i]):
             states[i] = States.Present
         else:
             states[i] = States.Absent
     return tuple(states)  # type: ignore
-
-def occuranceNumber(word: str, index: int) -> int:
-    letter = word[index]
-    occurances = 0
-    for i in range(index+1):
-        if(word[i] == letter):
-            occurances += 1
-    return occurances
-
-def totalOccurances(word: str, letter: str) -> int:
-    count = 0
-    for i in range(5):
-        if letter == word[i]:
-            count += 1
-    return count
 
 def prGreen(skk): return "\033[92m {}\033[00m" .format(skk)
 def prYellow(skk): return "\033[93m {}\033[00m" .format(skk)
@@ -68,3 +53,5 @@ def playGame(target: str) -> int:
         return -1
     else:
         return score
+
+print(playGame("crane"))
