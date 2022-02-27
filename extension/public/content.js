@@ -27,8 +27,8 @@ function parseSource() {
         correctWords++;
         getWordData();
     }
-    console.log("correct words: " + correctWords);
-    console.log("correct word: " + foo.children[correctWords - 1].getAttribute('letters'));
+    // console.log("correct words: " + correctWords);
+    // console.log("correct word: " + foo.children[correctWords - 1].getAttribute('letters'));
 }
 
 function getWordData() {
@@ -39,8 +39,20 @@ function getWordData() {
   var numPresent = 0;
   var numCorrect = 0;
   for (const letter of word) {
-    
+      if (letter.getAttribute('evaluation') === "absent") {
+        numAbsent++;
+      }
+      else if(letter.getAttribute('evaluation') === "present") {
+        numPresent++;
+      }
+      else if(letter.getAttribute('evaluation') === "correct") {
+        numCorrect++;
+      }
   }
+  console.log("The newest word is " + row.getAttribute('letters'));
+  console.log("There are " + numAbsent + " absent letters");
+  console.log("There are " + numPresent + " present letters");
+  console.log("There are " + numCorrect + " correct letters");
 }
 
 document.onkeypress = function (e) {
