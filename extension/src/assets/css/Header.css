@@ -1,3 +1,10 @@
-header .h1 {
-    font-size: 3em;
+.header p1 {
+    font-size: .7em;
+    font-style: italic;
+    color: lightslategray;
+}
+
+.header img {
+    width: 15em;
+    height: auto;
 }
