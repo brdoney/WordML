@@ -1,7 +1,6 @@
 from copy import copy
 from colouring import colouring, States
 import numpy as np
-from tqdm import tqdm
 from dataclasses import dataclass
 
 Config = tuple[States]
@@ -97,7 +96,7 @@ class Board:
     @staticmethod
     def __calc_p_configs(words: list[str]) -> dict[Config, float]:
         config_count: dict[Config, int] = {}
-        for guess in tqdm(words):
+        for guess in words:
             for target in words:
                 # Say that we got the colouring
                 c: Config = colouring(guess, target)
@@ -123,7 +122,7 @@ class Board:
         num_words = self.words.size
         ps = np.empty((num_words, self.NUM_COMBOS))
 
-        for i, guess in enumerate(tqdm(self.words)):
+        for i, guess in enumerate(self.words):
             counts: dict[Config, int] = {}
 
             for target in self.words:  # type: ignore
