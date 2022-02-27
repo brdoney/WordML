@@ -1,4 +1,4 @@
-import '../assets/css/Content.css';
+import '../assets/css/MainContent.css';
 
 function content() {
   return (
