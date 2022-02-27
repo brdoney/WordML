@@ -1,0 +1,23 @@
+.footer {
+    font-size: .5em;
+    font-style: italic;
+    color: lightslategray;
+}
+
+.footer p1 {
+    color: lightslategray;
+}
+
+.footer .table {
+    display: table;
+    margin: 0 auto;   
+}
+
+.footer ul {
+    list-style: none;
+}
+
+.footer li {
+    display: inline;
+    padding: 4px;
+}
