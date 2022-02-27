@@ -41,7 +41,7 @@ function Content() {
   useEffect(() => {
     async function func() {
       // Get id for later
-      const id = await fetch(`${API_URL}/get_id`)
+      const id = await fetch(`${API_URL}/id`)
         .then((res) => {
           return res.json();
         })
@@ -60,7 +60,7 @@ function Content() {
 
     chrome.runtime.onMessage.addListener(processChange);
     return () => chrome.runtime.onMessage.removeListener(processChange);
-  }, []);
+  });
 
   const rows = [];
   for (const row of data["entries"]) {
@@ -68,7 +68,7 @@ function Content() {
   }
 
   return (
-    <div class="content">
+    <div className="content">
       <table id="wordTable">
         <thead>
           <tr>

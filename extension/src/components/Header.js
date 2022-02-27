@@ -3,10 +3,10 @@ import logo from '../assets/img/logo.png';
 
 function header() {
   return (
-    <div class="header">
+    <div className="header">
       <img src={logo} alt="WordML Logo" />
       <br />
-      <p1>A machine learning wordle assistant</p1>
+      <h1>A machine learning wordle assistant</h1>
     </div>
   );
 }

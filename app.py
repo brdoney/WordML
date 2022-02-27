@@ -2,8 +2,10 @@ from typing import Optional
 from flask import Flask, request
 from board import Board, Row
 from guessing import calc_openings
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 max_id = 0
