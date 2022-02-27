@@ -13,4 +13,5 @@ window.addEventListener("keydown", function(event) {
 
 function parseSource() {
     var temp = document.getElementsByTagName('game-app').item(0);
+    var startPos = 
 }
