@@ -1,22 +1,75 @@
 ![project logo](https://i.imgur.com/DqT2dFa.png) 
 # WordML 
+
 ## Our Project
+
 Our project is a Google Chrome browser extension that aids Wordle players in making calculated and informative guesses as they play.
+
+![Imgur](https://i.imgur.com/FmXmVxS.png)
  
 ## Inspiration
+
 Wordle is an easy to learn, daily puzzle game that has rapidly grown in popularity and was recently bought by the New York Times. A common issue players run into is picking the next possible guess based on the Wordle word set. Our chrome extension aims to help players solve the Wordle of the day efficiently. With over 12,000 different words to chose from, sometimes players need a hint to solve the daily challenge.
 
 ## What We Learned
-We learned how to narrow down possible answers based on given input from the game. We also learned how to connect python to javascript using flask. Additionally, tight teamwork enables us to work on different components simultaneously and we learned how to bring them all together in the end for the final product.
+
+This was everyone on our team's first Hackathon! So obviously, we learned a lot. In terms of soft skills, we learned...
+* How to select a good topic
+* How to plan out a multi-person project
+* How to coordinate as a team while working on different components simultaneously
+* How to communicate effectively
+
+In terms of technical skills, this was our first time using the...
+* Chrome extension API
+* React
+* Flask
+
+From the problem specifically:
+* How to narrow down possible answers based on given input from the game
+* How to use information theory to calculate the best possible Wordle guess
+* How to connect Python to JavaScript using a web server and API
+* How to parse a web page using a Chrome extension and pass messages between the content and background scripts
+* How to integrate the AI solver system, Flask web server, Chrome extension API, and React in the front end to create the final product
 
 ## How We Built Our Project
-We used Python to implement our algorithm and to build a repeatable Wordle game to test the algorithm. We also used HTML, CSS, and React.JS to implement the chrome extension on the front end to display and feed data from our algorithm. Flask was used as a web server to provide an api for the web extension to get the best guesses.
+
+### Frontend
+
+Chrome extension which tracked board state and interacted with an API to display the best words in a React frontend.
+* Parsed changes to the Wordle board as the user entered new words using a content script
+* Performed updates to the tracked board state as they came in by sending and processing them to a background script
+* Poll the API using the full board configuration when the extension loads
+* Display the information in the React frontend
+
+### Backend
+
+Flask web server which responded to API requests about the top 5 best words for a given configuration.
+* Solver algorithm is implemented using Python
+* Repeatable Python Wordle game to train and verify the algorithm on
+* Flask web server to provide an API to access the solver indirectly
+
+### Solver
+
+With each word, the solver aims to pick the word that slims down the list of possible outcomes the most.
+1. Look through each possible word
+2. Find the set of board configurations (e.g. Green Yellow Gray Gray Green) for each word
+3. Calculate the entropy, a measure of how uniform the data is, of the possible board configurations for each word
+4. Picks the words with the highest entropy to suggest to the user
 
 ## Challenges
-### Challenge 01 - categorizing letters
-One of the main challenges we faced was categorizing the letters in a guess correctly. Letters from Wordle guesses can be sorted into correct, present, or absent. When categorizing the letters that should have been absent, they were being categorized to present. It took some debugging to fix our logic, but we were able to fix our issue.
 
-### Challenge 02 -  decoupling our project
-A constant challenge throughout the whole project was the ability to have all of the components communicate with each other effectively. From scraping Wordle's source code, to the servers running our algorithm, we decided to use JSON to manage and organize our project.
+### Challenge 01 - Categorizing Letters
 
-When all the different components intersected to make our final product, there arose new issues and bugs. United by a passion to learn, members of the team overcame exhaustion and worked through challenging logic problems long through the night.
+One of the main challenges we faced was matching Wordle's coloring strategy correctly. Letters from Wordle guesses can be sorted into correct (green), present (yellow), or absent (gray). The trouble comes from edge cases, like when you have multiple of the same letter in a word. This was problem for two areas in our code:
+1. In the game simulation used to train and verify the algorithm, we need to perfectly match Wordle's functionality. It took some debugging to fix our logic, but we were able to match it perfectly in the end
+2. In the solver algorithm, we need to be able to detect if a word is valid or not based on the colors that we've already seen (so we don't guess it when we know it would be bad). This means we have to apply Wordle's logic in reverse, which similarly required a *lot* of debugging.
+
+### Challenge 02 - Decoupling Our Project
+
+A constant challenge throughout the whole project was the ability to have all of the components communicate with each other. From scraping/parsing Wordle's source code in the Chrome extension content script, to the servers running our algorithm, we ended up using JSON to facilitate most of the communication.
+
+When all the different components were integrated to make our final product, there gave rise to new issues and bugs. United by a passion to learn, members of the team overcame exhaustion and worked through challenging logic problems long through the night.
+
+### Challenge 03 - Learning As We Went
+
+Most of these technologies we were using for the first time, so a lot of time was spent simply learning how they worked. In particular, the Chrome extension API and React were pain points, but very fun to learn about and use in the project.
