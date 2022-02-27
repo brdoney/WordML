@@ -1,3 +1,8 @@
+.header {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 .header p1 {
     font-size: .7em;
     font-style: italic;
@@ -5,6 +10,6 @@
 }
 
 .header img {
-    width: 15em;
+    width: 30em;
     height: auto;
 }
