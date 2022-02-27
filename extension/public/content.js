@@ -7,8 +7,7 @@ chrome.runtime.sendMessage({greeting: document.all[0].outerHTML}, function(respo
   });
 
 function parseSource() {
-    var el = document.createElement( 'html' );
-    el = document.getElementsByTagName('game-app').item(0);
-    var str = String(el.outerHTML);
-    console.log(str);
+    var foo = document.createElement( 'html' );
+    foo = document.getElementsByTagName('game-app').item(0).shadowRoot.getElementById('board');
+    console.log(foo);
 }
