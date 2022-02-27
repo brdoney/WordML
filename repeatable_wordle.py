@@ -1,4 +1,3 @@
-from random import randint
 import enum
 
 class States(enum.Enum):
@@ -10,30 +9,17 @@ class States(enum.Enum):
 
 def colouring(guess: str, target: str) -> tuple[States]:
     # states of each letter (correct, present, and absent)
-    states = [States.Emp] * 5
+    states = [States.Absent] * 5
+    guessArr = list(guess)
+    targetArr = list(target)
     for i in range(5):
-        if guess[i] == target[i]:
+        if(guessArr[i] == targetArr[i]):
             states[i] = States.Correct
-        elif guess[i] in target and occuranceNumber(guess, i) <= totalOccurances(target, guess[i]):
-            states[i] = States.Present
-        else:
-            states[i] = States.Absent
-    return tuple(states)  # type: ignore
-
-def occuranceNumber(word: str, index: int) -> int:
-    letter = word[index]
-    occurances = 0
-    for i in range(index+1):
-        if(word[i] == letter):
-            occurances += 1
-    return occurances
-
-def totalOccurances(word: str, letter: str) -> int:
-    count = 0
+            targetArr[i] = 0
     for i in range(5):
-        if letter == word[i]:
-            count += 1
-    return count
+        if guessArr[i] in targetArr and guess.count(guessArr[i],0,i) < targetArr.count(guess[i]):
+            states[i] = States.Present
+    return tuple(states)  # type: ignore
 
 def prGreen(skk): return "\033[92m {}\033[00m" .format(skk)
 def prYellow(skk): return "\033[93m {}\033[00m" .format(skk)
@@ -68,3 +54,10 @@ def playGame(target: str) -> int:
         return -1
     else:
         return score
+
+# index = randint(0, 2315)
+# file = open('wordle-answers-alphabetical.txt', 'r')
+# l = file.readlines()
+# word = l[index].strip('\n')
+
+# print(playGame(word))
