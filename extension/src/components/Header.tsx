@@ -1,7 +1,7 @@
-import '../assets/css/Header.css';
-import logo from '../assets/img/logo.png';
+import "../assets/css/Header.css";
+import logo from "../assets/img/logo.png";
 
-function header() {
+function Header() {
   return (
     <div className="header">
       <img src={logo} alt="WordML Logo" />
@@ -11,4 +11,4 @@ function header() {
   );
 }
 
-export default header;
+export default Header;

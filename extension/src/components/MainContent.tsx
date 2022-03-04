@@ -1,17 +1,20 @@
-/*global chrome*/
 import "../assets/css/MainContent.css";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const API_URL = "http://127.0.0.1:4999";
 
-function Row(props) {
-  const scorePercent = `${(props.score * 100).toFixed(2)}`;
+type RowProps = {
+  score: number;
+  word: string;
+};
+function Row({ score, word }: RowProps) {
+  const scorePercent = `${(score * 100).toFixed(2)}`;
 
   return (
     <tr>
-      <td>{props.word}</td>
+      <td>{word}</td>
       <td>
-        <progress value={props.score}></progress>
+        <progress value={score}></progress>
       </td>
       <td>{scorePercent}%</td>
     </tr>

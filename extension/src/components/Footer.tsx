@@ -1,6 +1,6 @@
-import '../assets/css/Footer.css';
+import "../assets/css/Footer.css";
 
-function footer() {
+function Footer() {
   return (
     <div className="footer">
       <p>VT Hacks 2022</p>
@@ -16,4 +16,4 @@ function footer() {
   );
 }
 
-export default footer;
+export default Footer;
