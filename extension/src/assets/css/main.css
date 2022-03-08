@@ -1,13 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Arimo&display=swap");
 
 .app {
-    text-align: center;
-    font-family: "Arimo", serif;
-    text-transform: uppercase;
-    background-color: black;
-    font-weight: bold;
+  text-align: center;
+  font-family: "Arimo", serif;
+  text-transform: uppercase;
+  background-color: black;
+  font-weight: bold;
 }
 
-h1, h2, p1, table {
-    color: white;
-  }
+h1,
+h2,
+p,
+table {
+  color: white;
+}

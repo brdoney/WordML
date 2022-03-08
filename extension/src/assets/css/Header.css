@@ -1,6 +1,6 @@
 .header {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    /* Sides are 16 b/c that makes the header wider than the full table */
+    padding: 15px 16px;
 }
 
 .header h1 {

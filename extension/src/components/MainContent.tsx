@@ -1,5 +1,6 @@
 import "../assets/css/MainContent.css";
 import { useState, useEffect } from "react";
+import { TailSpin } from "react-loader-spinner";
 
 const API_URL = "http://127.0.0.1:4999";
 
@@ -21,10 +22,20 @@ function Row({ score, word }: RowProps) {
   );
 }
 
+interface ScoredWord {
+  word: string;
+  score: number;
+}
+interface BoardData {
+  entries: [ScoredWord];
+}
 function Content() {
-  const [data, setData] = useState({ entries: [] });
+  const [data, setData] = useState<BoardData | null>(null);
 
   useEffect(() => {
+    // Show the spinner until our data is here
+    setData(null);
+
     chrome.runtime.sendMessage({ type: "get" }, (message) => {
       if (message.message === null) {
         fetch(`${API_URL}/board`)
@@ -53,13 +64,13 @@ function Content() {
     });
   }, []);
 
-  const rows = [];
-  for (const row of data["entries"]) {
-    rows.push(<Row word={row["word"]} score={row["score"]} />);
-  }
-
-  return (
-    <div className="content">
+  let table;
+  if (data != null) {
+    const rows = [];
+    for (const row of data.entries) {
+      rows.push(<Row word={row["word"]} score={row["score"]} />);
+    }
+    table = (
       <table id="wordTable">
         <thead>
           <tr>
@@ -70,8 +81,16 @@ function Content() {
         </thead>
         {rows}
       </table>
-    </div>
-  );
+    );
+  } else {
+    table = (
+      <div className="spinner">
+        <TailSpin color="blue" />
+      </div>
+    );
+  }
+
+  return <div className="content">{table}</div>;
 }
 
 export default Content;

@@ -1,29 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Arimo&display=swap');
-  h1 {
-  	text-align: center;
-  }
+h1 {
+  text-align: center;
+}
 
-  td, th {
-  	border: 2px solid grey;
-    padding: 1rem;
-  }
+td,
+th {
+  border: 2px solid grey;
+  padding: 1rem;
+}
 
-  thead{
-  	background-color: #383838;
-  }
+thead {
+  background-color: #383838;
+}
 
-  table {
-  	border-collapse: separate;
-    border-spacing: 5px;
-    text-align: center;
-    vertical-align: middle;
-    width: 50%;
-    opacity: 100%;
-  }
+table {
+  border-collapse: separate;
+  border-spacing: 5px;
+  text-align: center;
+  vertical-align: middle;
+}
 
-  .content{
-    margin: auto;
-    display: block;
-    justify-content: center;
-    padding-bottom: 15px;
-  }
+.content {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 15px;
+}
