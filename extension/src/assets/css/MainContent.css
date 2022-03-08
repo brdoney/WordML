@@ -21,7 +21,10 @@ table {
 
 .content {
   margin: auto;
+  padding-bottom: 15px;
+}
+
+.content-table {
   display: flex;
   justify-content: center;
-  padding-bottom: 15px;
 }
