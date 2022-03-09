@@ -2,7 +2,7 @@
 import "../assets/css/MainContent.css";
 import { useEffect, useState } from "react";
 
-const API_URL = "http://127.0.0.1:4999";
+const API_URL = "http://127.0.0.1:5000";
 
 function Row(props) {
   const scorePercent = `${(props.score * 100).toFixed(2)}`;
