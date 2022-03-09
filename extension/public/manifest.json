@@ -1,6 +1,7 @@
 {
   "short_name": "WordML",
   "name": "Wordle Machine Learning Helper",
+  "description": "A Wordle assistant to help you play better and get the answer quicker",
   "version": "1.0.0",
   "manifest_version": 2,
   "permissions": [
