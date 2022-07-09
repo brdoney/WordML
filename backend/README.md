@@ -28,3 +28,9 @@ Run the following command while at the root directory of the `backend/` folder a
 ```
 pip install -r requirements.txt
 ```
+
+## Launch Development Server
+For local development, you can serve up the backend using the command:
+```
+flask run -p 4999
+```
